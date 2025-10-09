@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.example.data.Pizza;
-import com.example.data.PizzaRepository;
+import com.example.entity.Pizza;
+import com.example.repository.PizzaRepository;
 
 @Service // Indique que cette classe est un service Spring (composant métier)
 public class PizzaService {

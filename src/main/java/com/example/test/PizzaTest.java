@@ -1,6 +1,6 @@
 package com.example.test;
 
-import com.example.data.*;
+import com.example.entity.Pizza;
 
 public class PizzaTest {
 

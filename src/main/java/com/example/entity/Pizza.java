@@ -1,4 +1,4 @@
-package com.example.data;
+package com.example.entity;
 
 import jakarta.persistence.*;
 
@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity // Indique que cette classe est une entité JPA (mappée à une table)
+
+@Table(name = "pizzas")  // ← AJOUT par Karim de cette ligne, conventions bdd d'avoir les noms des tables au pluriel 
+
 public class Pizza implements Serializable {
 
 	private static final long serialVersionUID = 1L; // Pour assurer la compatibilité lors de la sérialisation
