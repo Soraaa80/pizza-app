@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.data.Pizza;
+import com.example.entity.Pizza;
 import com.example.service.PizzaService;
 
 @Controller // Indique que cette classe est un contrôleur Spring MVC
