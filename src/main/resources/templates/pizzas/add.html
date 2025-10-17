@@ -17,7 +17,8 @@
         <div class="mb-3">
             <label for="sizePizza" class="form-label">Taille</label>
             <select th:field="*{sizePizza}" class="form-select" id="sizePizza" required>
-                <option th:each="size : ${T(com.example.data.Pizza.PizzaSize).values()}"
+                <!-- CORRECTION : Utilise pizzaSizes au lieu de T(...) -->
+                <option th:each="size : ${pizzaSizes}"
                         th:value="${size}" th:text="${size}">MEDIUM</option>
             </select>
         </div>
@@ -30,7 +31,8 @@
         <div class="mb-3">
             <label for="statutPizza" class="form-label">Statut</label>
             <select th:field="*{statutPizza}" class="form-select" id="statutPizza" required>
-                <option th:each="st : ${T(com.example.data.Pizza.PizzaStatut).values()}"
+                <!-- CORRECTION : Utilise pizzaStatuts au lieu de T(...) -->
+                <option th:each="st : ${pizzaStatuts}"
                         th:value="${st}" th:text="${st}">AVAILABLE</option>
             </select>
         </div>
