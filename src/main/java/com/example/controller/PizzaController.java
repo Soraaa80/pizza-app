@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -13,90 +14,69 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.entity.Pizza;
 import com.example.service.PizzaService;
 
-@Controller // Indique que cette classe est un contrôleur Spring MVC
-@RequestMapping("/pizzas") // Préfixe commun à toutes les routes de ce contrôleur
+@Controller
+@RequestMapping("/pizzas")
 public class PizzaController {
 
     private final PizzaService pizzaService;
 
-    // Injection du service PizzaService via le constructeur
     public PizzaController(PizzaService pizzaService) {
         this.pizzaService = pizzaService;
     }
 
-    // ============================
-    // Lister toutes les pizzas
-    // ============================
-
     @GetMapping
     public String getAllPizzas(Model model) {
-        List<Pizza> pizzas = pizzaService.getAllPizzas(); // Récupère la liste des pizzas
-        model.addAttribute("pizzas", pizzas); // Ajoute la liste au modèle pour la vue
-        return "pizzas"; // Renvoie le nom du template Thymeleaf (pizzas.html)
+        List<Pizza> pizzas = pizzaService.getAllPizzas();
+        model.addAttribute("pizzas", pizzas);
+        return "pizzas";
     }
-
-    // ============================
-    // Afficher les détails d'une pizza
-    // ============================
 
     @GetMapping("/{id}")
     public String getPizzaById(@PathVariable Long id, Model model) {
-        Pizza pizza = pizzaService.getPizza(id); // Récupère la pizza par son id
-        model.addAttribute("pizza", pizza); // Ajoute la pizza au modèle
-        return "pizzas/pizzadetails"; // Template pour afficher les détails (pizzadetails.html)
+        Pizza pizza = pizzaService.getPizza(id);
+        model.addAttribute("pizza", pizza);
+        return "pizzas/pizzadetails";
     }
-
-    // ============================
-    // Formulaire d'ajout
-    // ============================
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
-        model.addAttribute("pizza", new Pizza()); // Prépare un objet vide pour le binding
-        return "pizzas/add"; // Affiche le formulaire d'ajout (add.html)
+        model.addAttribute("pizza", new Pizza());
+        // AJOUT : Passer les tailles et statuts au template
+        model.addAttribute("pizzaSizes", Arrays.asList("SMALL", "MEDIUM", "LARGE", "EXTRA_LARGE"));
+        model.addAttribute("pizzaStatuts", Arrays.asList("AVAILABLE", "UNAVAILABLE", "COMING_SOON"));
+        return "pizzas/add";
     }
 
-    // Traitement du formulaire d'ajout
     @PostMapping("/add")
     public String addPizza(@ModelAttribute Pizza pizza) {
-        pizzaService.savePizza(pizza); // Enregistre la nouvelle pizza
-        return "redirect:/pizzas"; // Redirige vers la liste après l'ajout
+        pizzaService.savePizza(pizza);
+        return "redirect:/pizzas";
     }
-
-    // ============================
-    // Confirmation de suppression
-    // ============================
 
     @GetMapping("/delete/{id}")
     public String showDeleteConfirm(@PathVariable Long id, Model model) {
-        Pizza pizza = pizzaService.findById(id); // Récupère la pizza à supprimer
+        Pizza pizza = pizzaService.findById(id);
         model.addAttribute("pizza", pizza);
-        return "pizzas/delete"; // Page de confirmation (delete.html)
+        return "pizzas/delete";
     }
 
-    // Traitement de la suppression
     @PostMapping("/delete/{id}")
     public String deletePizza(@PathVariable Long id) {
-        pizzaService.deleteById(id); // Supprime la pizza
-        return "redirect:/pizzas"; // Redirige vers la liste
+        pizzaService.deleteById(id);
+        return "redirect:/pizzas";
     }
-
-    // ============================
-    // Formulaire de modification
-    // ============================
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Pizza pizza = pizzaService.getPizzaById(id); // Récupère la pizza à modifier
-        model.addAttribute("pizza", pizza); // Ajoute au modèle pour pré-remplir le formulaire
-        return "pizzas/edit"; // Page de modification (edit.html)
+        Pizza pizza = pizzaService.getPizzaById(id);
+        model.addAttribute("pizza", pizza);
+        return "pizzas/edit";
     }
 
-    // Traitement du formulaire de modification
     @PostMapping("/edit/{id}")
     public String updatePizza(@PathVariable Long id, @ModelAttribute Pizza pizza) {
-        pizza.setIdPizza(id); // Assure que l'ID est bien défini
-        pizzaService.savePizza(pizza); // Enregistre les modifications (ou appelle updatePizza si méthode dédiée)
-        return "redirect:/pizzas"; // Redirige vers la liste
+        pizza.setIdPizza(id);
+        pizzaService.savePizza(pizza);
+        return "redirect:/pizzas";
     }
 }
