@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.data.Pizza;
 import com.example.data.PizzaRepository;
+import com.example.exceptions.ExceptionNotFound;
 
 @Service // Indique que cette classe est un service Spring (composant métier)
 public class PizzaService {
@@ -45,7 +46,7 @@ public class PizzaService {
     // ========================
     // Mise à jour détaillée d'une pizza par ID (champ par champ)
     // ========================
-    public Pizza updatePizza(Long id, Pizza pizzaDetails) {
+    public Pizza updatePizza(Long id, Pizza pizzaDetails) throws ExceptionNotFound {
         Optional<Pizza> optionalPizza = pizzaRepository.findById(id);
         if (optionalPizza.isPresent()) {
             Pizza pizza = optionalPizza.get();
@@ -61,8 +62,8 @@ public class PizzaService {
             pizza.setDescriptionPizza(pizzaDetails.getDescriptionPizza());
 
             return pizzaRepository.save(pizza); // Sauvegarde la mise à jour
-        } else {
-            return null; // Peut poser problème → à remplacer par une exception
+        } else {     //modif exception au lieu du "else"
+        		throw new ExceptionNotFound("Pizza not found" + id);
         }
     }
 
