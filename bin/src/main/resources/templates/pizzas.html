@@ -1,0 +1,47 @@
+<!-- pizzas.html -->
+<div xmlns:th="http://www.thymeleaf.org"
+     th:replace="~{fragments/layout :: layout(~{::content})}"
+     th:with="title='Liste des Pizzas'">
+
+    <div th:fragment="content">
+        <h1 class="mb-4 text-center">Liste des Pizzas</h1>
+
+        <div class="d-flex justify-content-between mb-3">
+            <a href="/pizzas/add" class="btn btn-success">Ajouter une pizza</a>
+        </div>
+
+        <div th:if="${#lists.isEmpty(pizzas)}" class="alert alert-info text-center">
+            Aucune pizza disponible pour le moment.
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4" th:if="${not #lists.isEmpty(pizzas)}">
+            <div class="col" th:each="pizza : ${pizzas}">
+                <div class="card h-100 shadow-sm">
+                    <img th:src="${pizza.photoUrlPizza != null and !#strings.isEmpty(pizza.photoUrlPizza) 
+                                 ? pizza.photoUrlPizza : '/images/pizza-default.jpg'}"
+                         class="card-img-top" alt="Image de la pizza">
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title" th:text="${pizza.namePizza}">Nom Pizza</h5>
+                        <p class="card-text">Taille : <span th:text="${pizza.sizePizza}">TAILLE</span></p>
+                        <p class="card-text">Ingrédients : <span th:text="${pizza.ingredientsPizza}">Ingrédients</span></p>
+                        <p class="card-text fw-bold" th:text="'Prix : ' + ${pizza.pricePizza} + ' €'">Prix</p>
+                        <p class="card-text">
+                            Statut : 
+                            <span th:text="${pizza.statutPizza}"
+                                  th:classappend="${pizza.statutPizza == 'AVAILABLE' ? 'text-success' : 
+                                                  (pizza.statutPizza == 'UNAVAILABLE' ? 'text-danger' : 'text-warning')}">
+                            </span>
+                        </p>
+                        <div class="mt-auto">
+                            <a th:href="@{/pizzas/{id}(id=${pizza.idPizza})}" class="btn btn-primary btn-sm me-1">Voir</a>
+                            <a th:href="@{/pizzas/edit/{id}(id=${pizza.idPizza})}" class="btn btn-warning btn-sm me-1">Modifier</a>
+                            <a th:href="@{/pizzas/delete/{id}(id=${pizza.idPizza})}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Voulez-vous vraiment supprimer cette pizza ?');">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
